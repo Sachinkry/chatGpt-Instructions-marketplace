@@ -36,7 +36,7 @@ export default function page(){
                     >
                         <FcGoogle /> Google
                     </Button>
-                    <Button
+                    {/* <Button
                        className="w-full flex-row gap-2 text-neutral-600"
                        variant={"outline"}
                        onClick={() => handleLoginWithOAuth("twitter")}
@@ -49,7 +49,7 @@ export default function page(){
                        onClick={() => handleLoginWithOAuth("github")}
                     >
                         <FaGithub /> Github
-                    </Button>
+                    </Button> */}
                 </div>
                 <div className="glowBox -z-10"></div>
             </div>
