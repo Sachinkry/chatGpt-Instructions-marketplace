@@ -1,11 +1,16 @@
 'use client'
-
-import { useState, FormEvent } from 'react'
+import dynamic from "next/dynamic";
 import { Toaster } from "@/components/ui/toaster"
 import Header from '@/components/Header';
 import InstructionForm from '@/components/InstructionForm';
-import InstructionList from '@/components/InstructionList';
+
 import { InstructionProvider } from '@/context/InstructionContext';
+
+const InstructionList = dynamic(
+  () => import('@/components/InstructionList'), {
+    loading: () => <p>Loading...</p>,
+  }
+)
 
 export default function Home() {
 

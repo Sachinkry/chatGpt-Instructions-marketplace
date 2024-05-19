@@ -62,9 +62,12 @@ const useInstructions = () => {
       return;
     }
 
+    // determine the creator based on the provider
+    let creator = user.username; 
+
     const { data, error } = await supabase
       .from('instructions')
-      .insert([{ input, votes: 0, user_id: user.id, creator: user.email }])
+      .insert([{ input, votes: 0, user_id: user.id, creator}])
       .select();
 
     if (error) {

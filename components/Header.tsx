@@ -17,6 +17,7 @@ const Header: React.FC = () => {
         console.error('Error fetching user:', error);
       } else {
         setUser(data?.user);
+        console.log("dfdf", data?.user)
       }
     };
 
@@ -38,7 +39,7 @@ const Header: React.FC = () => {
       <h1 className="text-sm px-3 font-bold font-sans">ChatGPT Instructions Marketplace</h1>
       {user ? (
         <div className="flex items-center">
-          <span className="text-xs px-3 font-semibold text-purple-500/70">@{user.email.split('@')[0]}</span>
+          <span className="text-xs px-3 font-semibold text-purple-500/70">@{user.user_metadata.user_name.split('@')[0] || user.email.split('@')[0]}</span>
           <button onClick={handleSignOut} className="text-xs pr-3 text-neutral-400 hover:underline hover:text-red-600">
             <FaSignOutAlt />
           </button>

@@ -6,6 +6,7 @@ import { supabaseBrowser } from '@/lib/supabase/browser';
 interface User {
   id: string;
   email: string;
+  username: string;
 }
 
 interface UserContextProps {
@@ -26,8 +27,15 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) {
         console.error('Error fetching user:', error);
       } else if (data?.user) {
-        // Ensure email is always a string
-        setUser({ id: data.user.id, email: data.user.email || '' });
+        const { id, email = '', app_metadata, user_metadata } = data.user;
+        let username = '';
+
+        if (app_metadata?.provider === 'google') {
+          username = user_metadata?.user_name || email;
+        } else if (app_metadata?.provider === 'twitter' || app_metadata?.provider === 'github') {
+          username = user_metadata?.user_name;
+        }
+        setUser({ id, email, username });
       }
 
       setLoading(false);

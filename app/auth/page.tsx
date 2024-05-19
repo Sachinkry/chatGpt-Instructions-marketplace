@@ -32,16 +32,16 @@ export default function page(){
                     <Button
                        className="w-full flex-row gap-2 text-neutral-600"
                        variant={"outline"}
-                       onClick={()=> handleLoginWithOAuth("google")}
+                       onClick={() => handleLoginWithOAuth("twitter")}
                     >
-                        <FcGoogle /> Google
+                        <FaTwitter /> Twitter 
                     </Button>
                     <Button
                        className="w-full flex-row gap-2 text-neutral-600"
                        variant={"outline"}
-                       onClick={() => handleLoginWithOAuth("twitter")}
+                       onClick={()=> handleLoginWithOAuth("google")}
                     >
-                        <FaTwitter /> Twitter
+                        <FcGoogle /> Google
                     </Button>
                
                     <Button
