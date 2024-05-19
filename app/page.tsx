@@ -11,11 +11,11 @@ export default function Home() {
 
   return (
       <InstructionProvider>
-          <div className="min-h-screen w-full px-4 flex flex-col items-center font-mono">
+          <div className="min-h-screen w-full sm:px-6 flex flex-col items-center font-mono">
             <Header />
             <InstructionForm />
-            <div className="w-full max-w-4xl mb-6">
-              <hr className="border-gray-300 mb-4" />
+            <div className="w-full max-w-4xl mb-3">
+              <hr className="border-gray-300 mb-4 mx-3 " />
             </div>
             <InstructionList />
             <Toaster />

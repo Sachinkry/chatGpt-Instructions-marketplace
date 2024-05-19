@@ -16,6 +16,7 @@ interface RealtimePayload {
 
 const useInstructions = () => {
   const [instructions, setInstructions] = useState<Instruction[]>([]);
+  // const [temporaryInstructions, setTemporaryInstructions] = useState<Instruction[]>([]);
   const { toast } = useToast();
   const supabase = supabaseBrowser();
   const { user } = useUser();
@@ -24,6 +25,7 @@ const useInstructions = () => {
     fetchInstructions();
 
     // Subscribe to changes in the instructions table
+    //! deactivated for now!!!
     const channel = supabase
     .channel('public:instructions')
     .on<RealtimePostgresChangesPayload<Instruction>>('postgres_changes', 
@@ -39,6 +41,7 @@ const useInstructions = () => {
     };
 
   }, [instructions]);
+
 
   const fetchInstructions = async () => {
     const { data, error } = await supabase
@@ -74,23 +77,24 @@ const useInstructions = () => {
   const handleRealtimeEvent = (payload: any) => {
     const { eventType, new: newInstruction, old: oldInstruction } = payload;
 
-    setInstructions((prevInstructions) => {
-      switch (eventType) {
-        case 'INSERT':
-          return [newInstruction, ...prevInstructions];
-        case 'UPDATE':
-          return prevInstructions.map((instruction) =>
-            instruction.id === newInstruction.id ? newInstruction : instruction
-          );
-        case 'DELETE':
-          return prevInstructions.filter((instruction) => instruction.id !== oldInstruction.id);
-        default:
-          return prevInstructions;
-      }
-    });
+      setInstructions((prevInstructions) => {
+        switch (eventType) {
+          case 'INSERT':
+            return [newInstruction, ...prevInstructions];
+            case 'UPDATE':
+              return prevInstructions.map((instruction) =>
+                instruction.id === newInstruction.id ? newInstruction : instruction
+            );
+            case 'DELETE':
+              return prevInstructions.filter((instruction) => instruction.id !== oldInstruction.id);
+              default:
+                return prevInstructions;
+          }
+        });
   };
 
   // Toggle voting logic for upvote and downvote
+  
   const handleVote = async (instructionId: number, voteType: 'upvote' | 'downvote') => {
     if (!user) {
       toast({ description: 'You must be logged in to vote', variant: 'destructive' });

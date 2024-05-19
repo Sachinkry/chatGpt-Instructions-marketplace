@@ -35,7 +35,7 @@ const InstructionForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl">
+    <div className="w-full max-w-4xl px-3 sm:px-0">
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="mb-3">
           <label className="block text-xs font-medium text-gray-700 mb-1 px-3">

@@ -34,8 +34,8 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="my-3 flex flex-row justify-between w-full py-3 max-w-4xl bg-purple-100 mb-6">
-      <h1 className="text-sm px-3 font-bold font-sans">ChatGPT Instructions Marketplace</h1>
+    <header className="mb-3 sm:my-3 flex flex-row justify-between w-full py-3 max-w-4xl bg-purple-100 mb-6 ">
+      <h1 className="text-sm px-3 font-bold font-lato">ChatGPT Instructions Marketplace</h1>
       {user ? (
         <div className="flex items-center">
           <span className="text-xs px-3 font-semibold text-purple-500/70">@{user.email.split('@')[0]}</span>
