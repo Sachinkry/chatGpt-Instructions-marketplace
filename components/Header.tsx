@@ -19,7 +19,6 @@ const Header: React.FC = () => {
         console.error('Error fetching user:', error);
       } else {
         setUser(data?.user);
-        console.log("dfdf", data?.user)
       }
     };
 

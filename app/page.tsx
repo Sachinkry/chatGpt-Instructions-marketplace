@@ -5,12 +5,7 @@ import Header from '@/components/Header';
 import InstructionForm from '@/components/InstructionForm';
 import { InstructionProvider } from '@/context/InstructionContext';
 import Footer from "@/components/Footer";
-
-const InstructionList = dynamic(
-  () => import('@/components/InstructionList'), {
-    loading: () => <p>Loading...</p>,
-  }
-)
+import InstructionList from "@/components/InstructionList";
 
 export default function Home() {
 
