@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Instruction } from '@/types/instruction';
 import { useInstructionContext } from '@/context/InstructionContext';
 import { BiUpvote, BiDownvote } from 'react-icons/bi';
@@ -13,11 +13,18 @@ const InstructionItem: React.FC<InstructionItemProps> = ({ index, instruction })
   const { handleUpvote, handleDownvote, deleteInstruction, copyToClipboard } = useInstructionContext();
   const { user } = useUser();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isCreator, setIsCreator] = useState(false);
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
 
+  useEffect(() => {
+    if (user && instruction) {
+      setIsCreator(user.id === instruction.user_id);
+    }
+  }, [user, instruction]);
+
   return (
-    <li className="px-3 py-3 mb-2 bg-neutral-100 rounded-xs text-black gap-3 flex flex-row">
+    <li className={`px-3 py-3 mb-2 ${isCreator ? 'bg-purple-100/50': 'bg-neutral-100'}  rounded-xs text-black gap-3 flex flex-row`}>
       {/* upvote */}
       <div className="flex flex-col items-center gap-0.5 text-gray-400 text-xs">
         <span className="cursor-pointer text-sm" onClick={() => handleUpvote(instruction.id)}>
@@ -31,9 +38,9 @@ const InstructionItem: React.FC<InstructionItemProps> = ({ index, instruction })
         </span>
       </div>
 
-      <div className="flex flex-col gap-1 flex-grow cursor-pointer" onClick={toggleExpand} >
+      <div className="flex flex-col gap-2 flex-grow cursor-pointer" onClick={toggleExpand} >
         {/* here use user_id to get email from User and use the text before @ as value in the bleow p tag */}
-        <p className="flex w-full font-semibold text-xs text-gray-400 justify-right underline">@{instruction.creator.split('@')[0]}</p>
+        <p className={`flex w-full font-semibold text-xs text-gray-400 justify-right  ${isCreator ? 'text-purple-400/80': 'bg-neutral-100'}`}>@{instruction.creator.split('@')[0]}</p>
         <p className={`text-xs text-gray-600  ${isExpanded ? '' : 'line-clamp-3'}`}>
           {instruction.input}
         </p>
@@ -48,7 +55,7 @@ const InstructionItem: React.FC<InstructionItemProps> = ({ index, instruction })
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
           </svg>
           {/* delete button */}
-          {user && user.id === instruction.user_id && (
+          {isCreator && (
            
             
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 h-4 text-neutral-400 cursor-pointer hover:text-red-600" onClick={() => deleteInstruction(instruction.id)}>

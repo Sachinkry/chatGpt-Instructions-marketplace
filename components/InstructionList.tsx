@@ -10,12 +10,12 @@ const InstructionList = () => {
 
 
   return (
-    <ul className="w-full max-w-4xl px-3 sm:px-0">
-      
-      {sortedInstructions && sortedInstructions.map((instruction, index) => (
-        <InstructionItem key={index} index={index} instruction={instruction} />
-      ))}
-    </ul>
+      <ul className="w-full min-h-screen max-w-4xl px-3 sm:px-6">
+        
+        {sortedInstructions && sortedInstructions.map((instruction, index) => (
+          <InstructionItem key={index} index={index} instruction={instruction} />
+        ))}
+      </ul>
   );
 };
 

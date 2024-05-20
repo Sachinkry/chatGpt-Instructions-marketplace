@@ -16,16 +16,16 @@ interface RealtimePayload {
 
 const useInstructions = () => {
   const [instructions, setInstructions] = useState<Instruction[]>([]);
-  // const [temporaryInstructions, setTemporaryInstructions] = useState<Instruction[]>([]);
+  const [totalRickRollCount, setTotalRickRollCount] = useState('');
   const { toast } = useToast();
   const supabase = supabaseBrowser();
   const { user } = useUser();
 
   useEffect(() => {
     fetchInstructions();
+    getTotalRickRollCount();
 
     // Subscribe to changes in the instructions table
-    //! deactivated for now!!!
     const channel = supabase
     .channel('public:instructions')
     .on<RealtimePostgresChangesPayload<Instruction>>('postgres_changes', 
@@ -62,7 +62,22 @@ const useInstructions = () => {
       return;
     }
 
-    // determine the creator based on the provider
+    // limit 2 instructions per creator
+    const { count, error: countError } = await supabase
+    .from('instructions')
+    .select('*', { count: 'exact' })
+    .eq('user_id', user.id);
+
+    if (countError) return;
+
+    const userInstructionCount = count ?? 0;
+
+    if (userInstructionCount >= 2) {
+      toast({ description: 'You can only add up to 2 instructions', variant: 'destructive' });
+      return;
+    }
+
+    // creator
     let creator = user.username; 
 
     const { data, error } = await supabase
@@ -225,13 +240,75 @@ const useInstructions = () => {
     );
   };
 
+  const handleRickRoll = async () => {
+    if (!user) return;
+
+    // Redirect to the rickroll video
+    window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+
+    const userIdentifier = user.username; // Use username as the identifier
+    const { data, error } = await supabase
+      .from('rick_rolled_lords')
+      .select('*')
+      .eq('user_identifier', userIdentifier)
+      .single();
+
+    if (error && error.code !== 'PGRST116') { // Ignore "No rows found" error
+      console.error('Error checking rickroll status:', error);
+      return;
+    }
+
+    if (data) {
+      // Update existing rickroll count
+      const { error: updateError } = await supabase
+        .from('rick_rolled_lords')
+        .update({ rick_roll_count: 1 })
+        .eq('id', data.id);
+
+      if (updateError) {
+        console.error('Error updating rickroll count:', updateError);
+        return;
+      }
+    } else {
+      // Insert new rickroll entry
+      const { error: insertError } = await supabase
+        .from('rick_rolled_lords')
+        .insert({ user_identifier: userIdentifier, rick_roll_count: 1 });
+
+      if (insertError) {
+        console.error('Error inserting rickroll entry:', insertError);
+        return;
+      }
+    }
+
+    
+  };
+
+  const getTotalRickRollCount = async () => {
+    const { data, error } = await supabase
+      .from('rick_rolled_lords')
+      .select('*');
+  
+    if (error) {
+      console.error('Error fetching rick roll counts:', error);
+      return 0;
+    }
+  
+    const rickRollCountSum = data.reduce((acc, curr) => acc + curr.rick_roll_count, 0);
+    setTotalRickRollCount(rickRollCountSum);
+  };
+  
+
   return {
     instructions,
+    totalRickRollCount,
     addInstruction,
     handleUpvote,
     handleDownvote,
     deleteInstruction,
     copyToClipboard,
+    handleRickRoll, 
+    getTotalRickRollCount
   };
 };
 
