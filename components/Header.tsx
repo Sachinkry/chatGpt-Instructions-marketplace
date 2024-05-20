@@ -46,14 +46,14 @@ const Header: React.FC = () => {
       <div className="flex items-center">
           {user ? (
             <a
-              className="text-xs px-3 text-purple-600 underline  cursor-pointer"
+              className="text-xs px-3 text-purple-400 underline  cursor-pointer"
               onClick={handleRickRoll}
             >
-              surprises<span>{totalRickRollCount ? `(${totalRickRollCount})`:''}</span>
+              surprise!<span>{totalRickRollCount ? `(${totalRickRollCount})`:''}</span>
             </a>
           ) : (
             <span title="sign in anon" className="text-xs px-3 text-purple-400 cursor-not-allowed">
-              surprises<span>{totalRickRollCount ? `(${totalRickRollCount})`:''}</span>
+              surprise!
             </span>
           )}
       </div>
